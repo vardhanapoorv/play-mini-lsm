@@ -17,7 +17,11 @@ pub struct LsmIterator {
 
 impl LsmIterator {
     pub(crate) fn new(iter: LsmIteratorInner) -> Result<Self> {
-        Ok(Self { inner: iter })
+        let mut iter = Self { inner: iter };
+        while iter.is_valid() && iter.value().is_empty() {
+            iter.next()?;
+        }
+        Ok(iter)
     }
 }
 
